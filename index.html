@@ -473,6 +473,64 @@
             border: 1px solid #4CAF50;
             color: #2e7d32;
         }
+
+        /* Encounter Actions Layout */
+        .encounter-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border: 2px solid var(--silver);
+            background-color: white;
+            color: var(--frame-steel);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            min-height: 32px;
+        }
+
+        .copy-btn:hover:not(:disabled) {
+            border-color: var(--forge-copper);
+            background-color: #faf7f5;
+        }
+
+        .copy-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .copy-btn.success {
+            border-color: #22c55e;
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+
+        .copy-icon {
+            width: 14px;
+            height: 14px;
+            stroke-width: 2;
+        }
+
+        /* Success feedback animation */
+        @keyframes copySuccess {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .copy-btn.success {
+            animation: copySuccess 0.3s ease;
+        }
         
         /* Adversary dropdown styling */
         .adversary-dropdown {
@@ -677,8 +735,17 @@
         <div class="encounter-builder">
             <div class="encounter-header">
                 <h3>Your Encounter</h3>
-                <button class="reset-btn" onclick="resetEncounter()">Reset</button>
+                <div class="encounter-actions">
+                    <button class="copy-btn" id="copy-btn" onclick="copyEncounter()" disabled>
+                        <svg class="copy-icon" id="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        <span id="copy-text">Copy</span>
+                    </button>
+                    <button class="reset-btn" onclick="resetEncounter()">Reset</button>
             </div>
+        </div>
             <div class="encounter-summary">
                 <div class="points-remaining">
                     <span class="remaining-number" id="remaining-points">14</span>
@@ -995,6 +1062,7 @@
                     `;
                 }).join('') + modifierText;
             }
+            updateCopyButtonState();
         }
         
         // Update battle points display with modifiers
@@ -1064,6 +1132,7 @@
             if (cost <= remainingPoints) {
                 encounter.push({ type, cost });
                 updateEncounterDisplay();
+            updateCopyButtonState();
             }
         }
         
@@ -1082,12 +1151,14 @@
         function removeAdversary(index) {
             encounter.splice(index, 1);
             updateEncounterDisplay();
+            updateCopyButtonState();
         }
         
         // Reset entire encounter
         function resetEncounter() {
             encounter = [];
             updateEncounterDisplay();
+            updateCopyButtonState();
         }
         
         // Event listeners
@@ -1133,6 +1204,208 @@
         
         // Initialize
         calculateBattlePoints();
+
+        // Copy encounter function
+function copyEncounter() {
+    const encounterText = formatEncounterText();
+    
+    // Try to copy to clipboard
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(encounterText).then(() => {
+            showCopySuccess();
+        }).catch(() => {
+            fallbackCopy(encounterText);
+        });
+    } else {
+        fallbackCopy(encounterText);
+    }
+}
+
+// Fallback copy method for older browsers
+function fallbackCopy(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        document.execCommand('copy');
+        showCopySuccess();
+    } catch (err) {
+        console.error('Failed to copy encounter:', err);
+        alert('Copy failed. Please try again.');
+    } finally {
+        document.body.removeChild(textArea);
+    }
+}
+
+// Show success feedback
+function showCopySuccess() {
+    const copyBtn = document.getElementById('copy-btn');
+    const copyText = document.getElementById('copy-text');
+    const copyIcon = document.getElementById('copy-icon');
+    
+    // Change to success state
+    copyBtn.classList.add('success');
+    copyText.textContent = 'Copied!';
+    
+    // Change icon to checkmark
+    copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>';
+    
+    // Reset after 2 seconds
+    setTimeout(() => {
+        copyBtn.classList.remove('success');
+        copyText.textContent = 'Copy';
+        copyIcon.innerHTML = '<rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>';
+    }, 2000);
+}
+
+// Format encounter as text
+function formatEncounterText() {
+    let text = 'DAGGERHEART ENCOUNTER\n';
+    text += '=' + '='.repeat(23) + '\n\n';
+    
+    // Get current values
+    const pcCount = parseInt(document.getElementById('pcCount').value) || 4;
+    const partyTier = parseInt(document.querySelector('.tier-btn.active')?.getAttribute('data-value')) || 2;
+    const activeBtn = document.querySelector('.toggle-btn.active');
+    const difficultyValue = activeBtn?.getAttribute('data-value') || '0';
+    const difficultyText = difficultyValue === '-1' ? 'Easier' : 
+                          difficultyValue === '2' ? 'Harder' : 'Standard';
+    
+    // Calculate points
+    const basePoints = (3 * pcCount) + 2;
+    const difficultyMod = parseInt(difficultyValue);
+    
+    // Calculate modifiers (using your existing logic)
+    const soloCount = encounter.filter(item => item.type === 'Solo').length;
+    const multiSoloModifier = soloCount >= 2 ? -2 : 0;
+    
+    const hasElites = encounter.some(item => 
+        ['Bruiser', 'Horde', 'Leader', 'Solo'].includes(item.type)
+    );
+    const noElitesModifier = (!hasElites && encounter.length > 0) ? 1 : 0;
+    
+    const bonusDamageChecked = document.getElementById('bonus-damage').checked;
+    const bonusDamageModifier = bonusDamageChecked ? -2 : 0;
+    
+    const hasLowerTierAdversary = encounter.some(item => 
+        item.selectedAdversary && item.selectedAdversary.tier < partyTier
+    );
+    const lowerTierModifier = hasLowerTierAdversary ? 1 : 0;
+    
+    const totalBattlePoints = basePoints + difficultyMod + multiSoloModifier + noElitesModifier + bonusDamageModifier + lowerTierModifier;
+    const usedPoints = encounter.reduce((total, item) => total + item.cost, 0);
+    const remainingPoints = totalBattlePoints - usedPoints;
+    
+    // Party info
+    text += `Party: ${pcCount} PCs, Tier ${partyTier} (${difficultyText} Difficulty)\n`;
+    text += `Battle Points: ${totalBattlePoints} total, ${remainingPoints} remaining\n\n`;
+    
+    // Adversaries
+    if (encounter.length > 0) {
+        text += 'ADVERSARIES:\n';
+        
+        // Group identical adversaries
+        const groupedAdversaries = {};
+        encounter.forEach(item => {
+            const name = item.selectedAdversary ? item.selectedAdversary.name : item.type;
+            const key = `${name}_${item.type}_${item.cost}`;
+            
+            if (groupedAdversaries[key]) {
+                groupedAdversaries[key].count++;
+                groupedAdversaries[key].totalCost += item.cost;
+            } else {
+                groupedAdversaries[key] = {
+                    name: name,
+                    type: item.type,
+                    cost: item.cost,
+                    count: 1,
+                    totalCost: item.cost,
+                    tier: item.selectedAdversary ? item.selectedAdversary.tier : null
+                };
+            }
+        });
+        
+        Object.values(groupedAdversaries).forEach(adv => {
+            if (adv.count === 1) {
+                text += `• 1× ${adv.name}`;
+                if (adv.name !== adv.type) {
+                    text += ` (${adv.type})`;
+                }
+                if (adv.tier) {
+                    text += ` [Tier ${adv.tier}]`;
+                }
+                text += ` - ${adv.cost} pts\n`;
+            } else {
+                text += `• ${adv.count}× ${adv.name}`;
+                if (adv.name !== adv.type) {
+                    text += ` (${adv.type})`;
+                }
+                if (adv.tier) {
+                    text += ` [Tier ${adv.tier}]`;
+                }
+                text += ` - ${adv.cost} pts each, ${adv.totalCost} total\n`;
+            }
+        });
+        text += '\n';
+    }
+    
+    // Modifiers
+    text += 'MODIFIERS APPLIED:\n';
+    const modifiers = [];
+    
+    if (difficultyMod === -1) {
+        modifiers.push('Easier Difficulty (-1 Battle Point)');
+    } else if (difficultyMod === 2) {
+        modifiers.push('Harder Difficulty (+2 Battle Points)');
+    }
+    
+    if (bonusDamageModifier !== 0) {
+        modifiers.push('+1d4 Damage to All (-2 Battle Points)');
+    }
+    
+    if (multiSoloModifier !== 0) {
+        modifiers.push('2+ Solo Adversaries (-2 Battle Points)');
+    }
+    
+    if (noElitesModifier !== 0) {
+        modifiers.push('No Elite Adversaries (+1 Battle Point)');
+    }
+    
+    if (lowerTierModifier !== 0) {
+        modifiers.push('Lower Tier Adversary (+1 Battle Point)');
+    }
+    
+    if (modifiers.length > 0) {
+        modifiers.forEach(modifier => {
+            text += `• ${modifier}\n`;
+        });
+    } else {
+        text += '• None\n';
+    }
+    
+    text += '\n---\n';
+    text += 'Generated by Daggerheart Encounter Builder\n';
+    text += 'https://coryroush.github.io/daggerheart-encounter-builder/';
+    
+    return text;
+}
+
+// Update the copy button state when encounter changes
+function updateCopyButtonState() {
+    const copyBtn = document.getElementById('copy-btn');
+    
+    if (encounter.length > 0) {
+        copyBtn.disabled = false;
+    } else {
+        copyBtn.disabled = true;
+    }
+}
     </script>
 </body>
 </html>
