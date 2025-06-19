@@ -1,40 +1,28 @@
 # Daggerheart Encounter Builder
 
-A comprehensive encounter building tool for the Daggerheart tabletop RPG system. Build balanced encounters using the official SRD formula with automatic modifier calculations and a complete adversary database.
-
-🎲 **[Live Demo](https://yourusername.github.io/daggerheart-encounter-builder)** 
+A comprehensive encounter building tool compatible with the Daggerheart™ tabletop RPG system. Build balanced encounters using the official SRD's Battle Points formula, with automatic modifier calculations and a complete adversary database.
 
 ## Features
 
-### ⚔️ Complete SRD Implementation
+### Complete SRD Implementation
 - **Battle Points Formula**: Automatic calculation using `(3 × PCs) + 2`
 - **All Official Modifiers**: Difficulty, 2+ Solos, No Elites, Bonus Damage, Lower Tier
 - **Smart Calculations**: Real-time updates as you build encounters
-
-### 📚 Comprehensive Adversary Database
-- **127+ Adversaries**: Every adversary from the Daggerheart SRD
-- **All Tiers**: Complete coverage from Tier 1 (Level 1) to Tier 4 (Levels 8-10)
+- **127 Adversaries**: Every adversary from the Daggerheart SRD
 - **All Types**: Minions, Social, Support, Standard, Horde, Ranged, Skulk, Leader, Bruiser, Solo
 
-### 🎨 Professional Interface
-- **Forge & Frame Branding**: Beautiful, cohesive design
+### Interface
 - **Visual Feedback**: Color-coded point tracking and smart warnings
 - **Mobile Responsive**: Works perfectly on phones, tablets, and desktop
 - **Accessibility**: Proper contrast and semantic markup
-
-### 🧠 Smart Features
-- **Automatic Modifiers**: Detects and applies SRD modifiers based on encounter composition
-- **Tier Comparison**: Highlights lower-tier adversaries with copper badges
-- **Affordability Logic**: Disables adversaries you can't afford
-- **One-Click Reset**: Quickly start over with new encounters
 
 ## How to Use
 
 1. **Set Party Details**: Number of PCs and party tier
 2. **Choose Difficulty**: Easier (-1), Standard, or Harder (+2)
-3. **Add Modifiers**: Optional bonus damage checkbox
+3. **Add Bonus Damage Modifier**: Optional bonus damage checkbox
 4. **Build Encounter**: Click adversary types to add them
-5. **Select Specifics**: Choose exact adversaries from dropdowns
+5. **Select Specifics**: Choose adversaries from dropdowns
 6. **Monitor Budget**: Watch your Battle Points and modifiers update
 
 ## Example Encounters
@@ -61,31 +49,17 @@ This tool implements the encounter building rules from the Daggerheart System Re
 - All official encounter modifiers
 - Complete adversary database with accurate types and tiers
 
-### Browser Compatibility
-- Modern browsers (Chrome, Firefox, Safari, Edge)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-- No external dependencies required
 
 ### Performance
 - Lightweight single-file application
 - Instant calculations and updates
 - Responsive design for all screen sizes
 
-## Development
-
-### Structure
-```
-index.html          # Complete application (HTML + CSS + JS)
-README.md          # This documentation
-LICENSE            # Community Gaming License
-CONTRIBUTING.md    # How to contribute
-```
-
 ### Contributing
 We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 Common contribution areas:
-- Additional adversaries or corrections to existing data
+- Additional adversaries (please respect intellectual property) or corrections to existing data
 - UI/UX improvements
 - New features (export, save encounters, etc.)
 - Bug fixes and optimizations
@@ -95,10 +69,6 @@ Common contribution areas:
 2. Open `index.html` in your browser
 3. Make changes and test locally
 4. Submit a pull request
-
-## License
-
-This project is released under the **Community Gaming License** to encourage community contribution and improvement.
 
 ### Content Attribution
 This tool uses content from the Daggerheart System Reference Document, published by Darrington Press under the Community Gaming License.
@@ -111,8 +81,8 @@ This encounter builder was created by **Forge & Frame** as part of our mission t
 
 🔗 **Links**
 - [Forge & Frame Website](https://forgeandframe.co) *(coming soon)*
-- [GitHub Repository](https://github.com/yourusername/daggerheart-encounter-builder)
-- [Report Issues](https://github.com/yourusername/daggerheart-encounter-builder/issues)
+- [GitHub Repository](https://github.com/coryroush/daggerheart-encounter-builder)
+- [Report Issues](https://github.com/coryroush/daggerheart-encounter-builder/issues)
 
 ---
 
