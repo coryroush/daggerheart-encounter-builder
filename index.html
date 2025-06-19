@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daggerheart Encounter Builder - Forge & Frame</title>
+    <meta name="description" content="Professional encounter builder for Daggerheart RPG with complete SRD adversary database and automatic modifier calculations.">
+    <style>
+        /* Forge & Frame Brand Colors */
+        :root {
+            --forge-copper: #B85C38;
+            --frame-steel: #4A5568;
+            --ember-orange: #E07A3F;
+            --blueprint-blue: #2D5AA0;
+            --parchment: #F7F5F3;
+            --charcoal: #2D3748;
+            --silver: #A0AEC0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: var(--parchment);
+            color: var(--charcoal);
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(45, 55, 72, 0.1);
+            border: 1px solid var(--silver);
+            position: relative;
+        }
+        
+        h1 {
+            color: var(--frame-steel);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: var(--forge-copper);
+            font-size: 14px;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--frame-steel);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        input[type="number"] {
+            width: 120px;
+            padding: 12px;
+            border: 2px solid var(--silver);
+            border-radius: 4px;
+            font-size: 16px;
+            color: var(--charcoal);
+            transition: border-color 0.3s ease;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--forge-copper);
+        }
+        
+        .result {
+            background: linear-gradient(135deg, var(--forge-copper), var(--ember-orange));
+            color: white;
+            padding: 18px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(184, 92, 56, 0.3);
+        }
+        
+        .result h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .calculation {
+            margin-top: 8px;
+            font-size: 13px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+        
+        .modifiers-list {
+            margin-top: 6px;
+            font-size: 11px;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+        
+        /* Toggle Buttons */
+        .toggle-buttons, .tier-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .toggle-btn, .tier-btn {
+            padding: 10px 16px;
+            border: 2px solid var(--silver);
+            background-color: var(--parchment);
+            color: var(--frame-steel);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-btn:hover, .tier-btn:hover {
+            border-color: var(--forge-copper);
+        }
+        
+        .toggle-btn.active {
+            background-color: var(--forge-copper);
+            border-color: var(--forge-copper);
+            color: white;
+        }
+        
+        .tier-btn.active {
+            background-color: var(--blueprint-blue);
+            border-color: var(--blueprint-blue);
+            color: white;
+        }
+        
+        .tier-subtitle {
+            margin-top: 5px;
+            font-size: 12px;
+            color: var(--frame-steel);
+            font-style: italic;
+        }
+        
+        /* Checkbox styling */
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 0;
+            text-transform: none;
+            letter-spacing: normal;
+            font-weight: normal;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            margin: 0;
+        }
+        
+        /* Adversary Costs Section */
+        .adversary-costs {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px solid var(--silver);
+        }
+        
+        .adversary-costs h3 {
+            color: var(--frame-steel);
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+        
+        .instruction {
+            text-align: center;
+            font-size: 12px;
+            color: var(--frame-steel);
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .cost-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .cost-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: var(--parchment);
+            border: 2px solid var(--silver);
+            border-radius: 6px;
+            padding: 10px 6px;
+            flex: 1;
+            min-width: 85px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .cost-item:hover:not(.disabled) {
+            border-color: var(--forge-copper);
+            background-color: #faf7f5;
+        }
+        
+        .cost-item.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background-color: #f0f0f0;
+        }
+        
+        .cost-item.disabled .cost-number,
+        .cost-item.disabled .cost-label,
+        .cost-item.disabled .cost-note {
+            color: #999;
+        }
+        
+        .cost-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--forge-copper);
+            margin-bottom: 5px;
+        }
+        
+        .cost-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--frame-steel);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            line-height: 1.2;
+        }
+        
+        .cost-note {
+            font-size: 9px;
+            color: var(--frame-steel);
+            text-align: center;
+            margin-top: 3px;
+            font-weight: 500;
+            line-height: 1.1;
+        }
+        
+        /* Encounter Builder Section */
+        .encounter-builder {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px solid var(--silver);
+        }
+        
+        .encounter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .encounter-builder h3 {
+            color: var(--frame-steel);
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .reset-btn {
+            padding: 6px 12px;
+            border: 2px solid var(--silver);
+            background-color: white;
+            color: var(--frame-steel);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .reset-btn:hover {
+            border-color: var(--ember-orange);
+            background-color: var(--ember-orange);
+            color: white;
+        }
+        
+        .encounter-summary {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        
+        .points-remaining {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border-radius: 6px;
+            border: 2px solid var(--silver);
+            background-color: var(--parchment);
+            transition: all 0.3s ease;
+        }
+        
+        .points-remaining.plenty {
+            border-color: #4CAF50;
+            background-color: #f1f8e9;
+        }
+        
+        .points-remaining.low {
+            border-color: #FF9800;
+            background-color: #fff8e1;
+        }
+        
+        .points-remaining.over {
+            border-color: #f44336;
+            background-color: #ffebee;
+        }
+        
+        .points-remaining.perfect {
+            border-color: var(--forge-copper);
+            background-color: #faf7f5;
+        }
+        
+        .points-used {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border-radius: 6px;
+            border: 2px solid var(--silver);
+            background-color: var(--parchment);
+        }
+        
+        .remaining-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--forge-copper);
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+        
+        .remaining-number.plenty {
+            color: #4CAF50;
+        }
+        
+        .remaining-number.low {
+            color: #FF9800;
+        }
+        
+        .remaining-number.over {
+            color: #f44336;
+        }
+        
+        .remaining-number.perfect {
+            color: var(--forge-copper);
+        }
+        
+        .used-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--frame-steel);
+            margin-bottom: 5px;
+        }
+        
+        .remaining-label, .used-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--frame-steel);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+        
+        .encounter-list {
+            min-height: 60px;
+            padding: 15px;
+            border: 2px solid var(--silver);
+            border-radius: 6px;
+            background-color: #fafafa;
+        }
+        
+        .empty-message {
+            text-align: center;
+            color: var(--frame-steel);
+            font-style: italic;
+            margin: 0;
+        }
+        
+        .encounter-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background-color: white;
+            border: 1px solid var(--silver);
+            border-radius: 4px;
+        }
+        
+        .encounter-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .encounter-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .encounter-type {
+            font-weight: 600;
+            color: var(--frame-steel);
+        }
+        
+        .encounter-cost {
+            font-size: 12px;
+            color: var(--forge-copper);
+            font-weight: 600;
+        }
+        
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--silver);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px;
+            transition: color 0.3s ease;
+        }
+        
+        .remove-btn:hover {
+            color: var(--ember-orange);
+        }
+        
+        .modifier-applied {
+            margin-top: 12px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .modifier-applied.penalty {
+            background-color: #ffebee;
+            border: 1px solid #f44336;
+            color: #c62828;
+        }
+        
+        .modifier-applied.bonus {
+            background-color: #e8f5e8;
+            border: 1px solid #4CAF50;
+            color: #2e7d32;
+        }
+        
+        /* Adversary dropdown styling */
+        .adversary-dropdown {
+            margin-top: 8px;
+            padding: 4px 8px;
+            border: 1px solid var(--silver);
+            border-radius: 4px;
+            font-size: 11px;
+            color: var(--charcoal);
+            background-color: white;
+            max-width: 200px;
+        }
+        
+        .adversary-dropdown:focus {
+            outline: none;
+            border-color: var(--forge-copper);
+        }
+        
+        .tier-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            background-color: var(--blueprint-blue);
+            color: white;
+            border-radius: 10px;
+            font-size: 9px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .tier-badge.lower {
+            background-color: var(--forge-copper);
+        }
+        
+        /* Responsive behavior for smaller screens */
+        @media (max-width: 600px) {
+            .cost-grid {
+                justify-content: center;
+                gap: 12px;
+            }
+            
+            .cost-item {
+                flex: 0 1 calc(50% - 6px);
+                min-width: 120px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .cost-item {
+                flex: 0 1 calc(100% - 6px);
+                min-width: 140px;
+            }
+        }
+        
+        /* Technical blueprint-style accents */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 20px;
+            height: 20px;
+            border-left: 2px solid var(--silver);
+            border-top: 2px solid var(--silver);
+        }
+        
+        .container::after {
+            content: '';
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 20px;
+            height: 20px;
+            border-right: 2px solid var(--silver);
+            border-bottom: 2px solid var(--silver);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: var(--frame-steel);
+            font-size: 12px;
+        }
+        
+        .footer a {
+            color: var(--forge-copper);
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Daggerheart Encounter Builder</h1>
+        <p class="subtitle">Calculate Battle Points for balanced encounters using the Daggerheart SRD formula</p>
+        
+        <div class="input-group">
+            <label for="pcCount">Number of PCs in Combat:</label>
+            <input type="number" id="pcCount" min="1" max="8" value="4">
+        </div>
+        
+        <div class="input-group">
+            <label>Difficulty:</label>
+            <div class="toggle-buttons">
+                <button type="button" class="toggle-btn" data-value="-1">Easier -1</button>
+                <button type="button" class="toggle-btn active" data-value="0">Standard</button>
+                <button type="button" class="toggle-btn" data-value="2">Harder +2</button>
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <label class="checkbox-item">
+                <input type="checkbox" id="bonus-damage" value="-2">
+                Add +1d4 damage to all adversaries (-2 points)
+            </label>
+        </div>
+        
+        <div class="input-group">
+            <label>Party Tier:</label>
+            <div class="tier-buttons">
+                <button type="button" class="tier-btn" data-value="1">Tier 1</button>
+                <button type="button" class="tier-btn active" data-value="2">Tier 2</button>
+                <button type="button" class="tier-btn" data-value="3">Tier 3</button>
+                <button type="button" class="tier-btn" data-value="4">Tier 4</button>
+            </div>
+            <div class="tier-subtitle">Tier 2: Levels 2-4</div>
+        </div>
+        
+        <div class="result">
+            <h2 id="finalPoints">14 Battle Points</h2>
+            <div class="calculation" id="calculation">(3 × 4) + 2 = 14</div>
+            <div class="modifiers-list" id="modifiers-list"></div>
+        </div>
+        
+        <div class="adversary-costs">
+            <h3>Adversary Costs</h3>
+            <p class="instruction">Click to add adversaries to your encounter:</p>
+            <div class="cost-grid">
+                <div class="cost-item" data-type="Minions" data-cost="1">
+                    <span class="cost-number">1</span>
+                    <span class="cost-label">Minions</span>
+                    <span class="cost-note" id="minion-count">1 point = 4 Minions</span>
+                </div>
+                <div class="cost-item" data-type="Social" data-cost="1">
+                    <span class="cost-number">1</span>
+                    <span class="cost-label">Social</span>
+                </div>
+                <div class="cost-item" data-type="Support" data-cost="1">
+                    <span class="cost-number">1</span>
+                    <span class="cost-label">Support</span>
+                </div>
+                <div class="cost-item" data-type="Standard" data-cost="2">
+                    <span class="cost-number">2</span>
+                    <span class="cost-label">Standard</span>
+                </div>
+                <div class="cost-item" data-type="Horde" data-cost="2">
+                    <span class="cost-number">2</span>
+                    <span class="cost-label">Horde</span>
+                </div>
+            </div>
+            <div class="cost-grid">
+                <div class="cost-item" data-type="Ranged" data-cost="2">
+                    <span class="cost-number">2</span>
+                    <span class="cost-label">Ranged</span>
+                </div>
+                <div class="cost-item" data-type="Skulk" data-cost="2">
+                    <span class="cost-number">2</span>
+                    <span class="cost-label">Skulk</span>
+                </div>
+                <div class="cost-item" data-type="Leader" data-cost="3">
+                    <span class="cost-number">3</span>
+                    <span class="cost-label">Leader</span>
+                </div>
+                <div class="cost-item" data-type="Bruiser" data-cost="4">
+                    <span class="cost-number">4</span>
+                    <span class="cost-label">Bruiser</span>
+                </div>
+                <div class="cost-item" data-type="Solo" data-cost="5">
+                    <span class="cost-number">5</span>
+                    <span class="cost-label">Solo</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="encounter-builder">
+            <div class="encounter-header">
+                <h3>Your Encounter</h3>
+                <button class="reset-btn" onclick="resetEncounter()">Reset</button>
+            </div>
+            <div class="encounter-summary">
+                <div class="points-remaining">
+                    <span class="remaining-number" id="remaining-points">14</span>
+                    <span class="remaining-label">Points Remaining</span>
+                </div>
+                <div class="points-used">
+                    <span class="used-number" id="used-points">0</span>
+                    <span class="used-label">Points Used</span>
+                </div>
+            </div>
+            <div class="encounter-list" id="encounter-list">
+                <p class="empty-message">Click adversary types above to add them to your encounter.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Built with ❤️ for the Daggerheart community | <a href="https://github.com/yourusername/daggerheart-encounter-builder">View on GitHub</a></p>
+        <p>This tool uses content from the <a href="https://darringtonpress.com/daggerheart/">Daggerheart System Reference Document</a> under the Community Gaming License.</p>
+    </div>
+
+    <script>
+        // Complete adversary database from Daggerheart SRD
+        const adversaryDatabase = {
+            "Minions": [
+                { name: "Giant Rat", tier: 1 },
+                { name: "Jagged Knife Lackey", tier: 1 },
+                { name: "Minor Treant", tier: 1 },
+                { name: "Sellsword", tier: 1 },
+                { name: "Skeleton Dredge", tier: 1 },
+                { name: "Tangle Bramble", tier: 1 },
+                { name: "Rotted Zombie", tier: 1 },
+                { name: "Apprentice Assassin", tier: 2 },
+                { name: "Conscript", tier: 2 },
+                { name: "Cult Initiate", tier: 2 },
+                { name: "Giant Recruit", tier: 2 },
+                { name: "Elemental Spark", tier: 3 },
+                { name: "Treant Sapling", tier: 3 },
+                { name: "Fallen Shock Troop", tier: 4 },
+                { name: "Hallowed Soldier", tier: 4 },
+                { name: "Outer Realms Thrall", tier: 4 }
+            ],
+            "Social": [
+                { name: "Courtier", tier: 1 },
+                { name: "Merchant", tier: 1 },
+                { name: "Petty Noble", tier: 1 },
+                { name: "Courtesan", tier: 2 },
+                { name: "Merchant Baron", tier: 2 },
+                { name: "Royal Advisor", tier: 2 },
+                { name: "Spy", tier: 2 },
+                { name: "Monarch", tier: 3 }
+            ],
+            "Support": [
+                { name: "Jagged Knife Hexer", tier: 1 },
+                { name: "Cult Adept", tier: 2 },
+                { name: "Demon of Avarice", tier: 3 },
+                { name: "Greater Water Elemental", tier: 3 },
+                { name: "Vault Guardian Gaoler", tier: 3 },
+                { name: "Fallen Sorcerer", tier: 4 },
+                { name: "Outer Realms Corrupter", tier: 4 }
+            ],
+            "Standard": [
+                { name: "Glass Snake", tier: 1 },
+                { name: "Harrier", tier: 1 },
+                { name: "Bladed Guard", tier: 1 },
+                { name: "Jagged Knife Bandit", tier: 1 },
+                { name: "Skeleton Warrior", tier: 1 },
+                { name: "Sylvan Soldier", tier: 1 },
+                { name: "Shambling Zombie", tier: 1 },
+                { name: "Elite Soldier", tier: 2 },
+                { name: "Failed Experiment", tier: 2 },
+                { name: "Spectral Guardian", tier: 2 },
+                { name: "Vampire", tier: 3 }
+            ],
+            "Horde": [
+                { name: "Giant Mosquitoes", tier: 1 },
+                { name: "Pirate Raiders", tier: 1 },
+                { name: "Swarm of Rats", tier: 1 },
+                { name: "Tangle Bramble Swarm", tier: 1 },
+                { name: "Zombie Pack", tier: 1 },
+                { name: "Archer Squadron", tier: 2 },
+                { name: "Demonic Hound Pack", tier: 2 },
+                { name: "Electric Eels", tier: 2 },
+                { name: "Zombie Legion", tier: 4 }
+            ],
+            "Ranged": [
+                { name: "Archer Guard", tier: 1 },
+                { name: "Jagged Knife Sniper", tier: 1 },
+                { name: "Skeleton Archer", tier: 1 },
+                { name: "Chaos Skull", tier: 2 },
+                { name: "Spectral Archer", tier: 2 },
+                { name: "War Wizard", tier: 2 },
+                { name: "Demon of Jealousy", tier: 3 },
+                { name: "Vault Guardian Turret", tier: 3 },
+                { name: "Hallowed Archer", tier: 4 }
+            ],
+            "Skulk": [
+                { name: "Dire Wolf", tier: 1 },
+                { name: "Jagged Knife Shadow", tier: 1 },
+                { name: "Green Ooze", tier: 1 },
+                { name: "Tiny Green Ooze", tier: 1 },
+                { name: "Red Ooze", tier: 1 },
+                { name: "Tiny Red Ooze", tier: 1 },
+                { name: "Assassin Poisoner", tier: 2 },
+                { name: "Cult Fang", tier: 2 },
+                { name: "Giant Eagle", tier: 2 },
+                { name: "Masked Thief", tier: 2 },
+                { name: "Siren", tier: 2 },
+                { name: "Stonewraith", tier: 2 },
+                { name: "Demon of Despair", tier: 3 },
+                { name: "Dire Bat", tier: 3 },
+                { name: "Huge Green Ooze", tier: 3 }
+            ],
+            "Leader": [
+                { name: "Head Guard", tier: 1 },
+                { name: "Jagged Knife Lieutenant", tier: 1 },
+                { name: "Pirate Captain", tier: 1 },
+                { name: "Spellblade", tier: 1 },
+                { name: "Young Dryad", tier: 1 },
+                { name: "Master Assassin", tier: 2 },
+                { name: "Giant Beastmaster", tier: 2 },
+                { name: "Knight of the Realm", tier: 2 },
+                { name: "Mortal Hunter", tier: 2 },
+                { name: "Secret-Keeper", tier: 2 },
+                { name: "Spectral Captain", tier: 2 },
+                { name: "Demon of Hubris", tier: 3 },
+                { name: "Dryad", tier: 3 },
+                { name: "Head Vampire", tier: 3 },
+                { name: "Arch-Necromancer", tier: 4 },
+                { name: "High Seraph", tier: 4 }
+            ],
+            "Bruiser": [
+                { name: "Bear", tier: 1 },
+                { name: "Deeproot Defender", tier: 1 },
+                { name: "Giant Scorpion", tier: 1 },
+                { name: "Jagged Knife Kneebreaker", tier: 1 },
+                { name: "Pirate Tough", tier: 1 },
+                { name: "Skeleton Knight", tier: 1 },
+                { name: "Brawny Zombie", tier: 1 },
+                { name: "Giant Brawler", tier: 2 },
+                { name: "Minotaur Wrecker", tier: 2 },
+                { name: "Shark", tier: 2 },
+                { name: "Demon of Wrath", tier: 3 },
+                { name: "Greater Earth Elemental", tier: 3 },
+                { name: "Oak Treant", tier: 3 },
+                { name: "Vault Guardian Sentinel", tier: 3 },
+                { name: "Outer Realms Abomination", tier: 4 },
+                { name: "Perfected Zombie", tier: 4 }
+            ],
+            "Solo": [
+                { name: "Acid Burrower", tier: 1 },
+                { name: "Cave Ogre", tier: 1 },
+                { name: "Construct", tier: 1 },
+                { name: "Minor Chaos Elemental", tier: 1 },
+                { name: "Minor Fire Elemental", tier: 1 },
+                { name: "Minor Demon", tier: 1 },
+                { name: "Patchwork Zombie Hulk", tier: 1 },
+                { name: "Battle Box", tier: 2 },
+                { name: "Gorgon", tier: 2 },
+                { name: "Juvenile Flickerfly", tier: 2 },
+                { name: "Adult Flickerfly", tier: 3 },
+                { name: "Hydra", tier: 3 },
+                { name: "Young Ice Dragon", tier: 3 },
+                { name: "Fallen Warlord: Realm-Breaker", tier: 4 },
+                { name: "Fallen Warlord: Undefeated Champion", tier: 4 },
+                { name: "Kraken", tier: 4 },
+                { name: "Oracle of Doom", tier: 4 },
+                { name: "Volcanic Dragon: Ashen Tyrant", tier: 4 },
+                { name: "Volcanic Dragon: Molten Scourge", tier: 4 },
+                { name: "Volcanic Dragon: Obsidian Predator", tier: 4 }
+            ]
+        };
+        
+        // Encounter tracking
+        let encounter = [];
+        let totalBattlePoints = 14;
+        
+        // Calculate battle points based on PC count and difficulty
+        function calculateBattlePoints() {
+            const pcCount = parseInt(document.getElementById('pcCount').value) || 4;
+            const activeBtn = document.querySelector('.toggle-btn.active');
+            const difficultyMod = parseInt(activeBtn?.getAttribute('data-value')) || 0;
+            
+            const basePoints = (3 * pcCount) + 2;
+            totalBattlePoints = basePoints + difficultyMod;
+            
+            document.getElementById('minion-count').textContent = `1 point = ${pcCount} Minions`;
+            updateEncounterDisplay();
+        }
+        
+        // Update the complete encounter display
+        function updateEncounterDisplay() {
+            const usedPoints = encounter.reduce((total, item) => total + item.cost, 0);
+            const partyTier = parseInt(document.querySelector('.tier-btn.active')?.getAttribute('data-value')) || 2;
+            
+            // Calculate all modifiers
+            const soloCount = encounter.filter(item => item.type === 'Solo').length;
+            const multiSoloModifier = soloCount >= 2 ? -2 : 0;
+            
+            const hasElites = encounter.some(item => 
+                ['Bruiser', 'Horde', 'Leader', 'Solo'].includes(item.type)
+            );
+            const noElitesModifier = (!hasElites && encounter.length > 0) ? 1 : 0;
+            
+            const bonusDamageChecked = document.getElementById('bonus-damage').checked;
+            const bonusDamageModifier = bonusDamageChecked ? -2 : 0;
+            
+            const hasLowerTierAdversary = encounter.some(item => 
+                item.selectedAdversary && item.selectedAdversary.tier < partyTier
+            );
+            const lowerTierModifier = hasLowerTierAdversary ? 1 : 0;
+            
+            const totalModifiers = multiSoloModifier + noElitesModifier + bonusDamageModifier + lowerTierModifier;
+            const effectiveBattlePoints = totalBattlePoints + totalModifiers;
+            const remainingPoints = effectiveBattlePoints - usedPoints;
+            
+            // Update display
+            document.getElementById('used-points').textContent = usedPoints;
+            document.getElementById('remaining-points').textContent = remainingPoints;
+            updateBattlePointsDisplay(multiSoloModifier, noElitesModifier, bonusDamageModifier, lowerTierModifier);
+            
+            // Color coding for remaining points
+            const remainingElement = document.getElementById('remaining-points');
+            const remainingContainer = remainingElement.closest('.points-remaining');
+            
+            remainingElement.classList.remove('plenty', 'low', 'over', 'perfect');
+            remainingContainer.classList.remove('plenty', 'low', 'over', 'perfect');
+            
+            if (remainingPoints === 0) {
+                remainingElement.classList.add('perfect');
+                remainingContainer.classList.add('perfect');
+            } else if (remainingPoints < 0) {
+                remainingElement.classList.add('over');
+                remainingContainer.classList.add('over');
+            } else if (remainingPoints <= 3) {
+                remainingElement.classList.add('low');
+                remainingContainer.classList.add('low');
+            } else {
+                remainingElement.classList.add('plenty');
+                remainingContainer.classList.add('plenty');
+            }
+            
+            // Update adversary affordability
+            document.querySelectorAll('.cost-item').forEach(item => {
+                const cost = parseInt(item.getAttribute('data-cost'));
+                if (cost > remainingPoints) {
+                    item.classList.add('disabled');
+                } else {
+                    item.classList.remove('disabled');
+                }
+            });
+            
+            // Build encounter list
+            const encounterList = document.getElementById('encounter-list');
+            
+            if (encounter.length === 0) {
+                encounterList.innerHTML = '<p class="empty-message">Click adversary types above to add them to your encounter.</p>';
+            } else {
+                let modifierText = '';
+                if (multiSoloModifier !== 0) {
+                    modifierText += `<div class="modifier-applied penalty">2+ Solos: -2 Battle Points</div>`;
+                }
+                if (noElitesModifier !== 0) {
+                    modifierText += `<div class="modifier-applied bonus">No Elite Adversaries: +1 Battle Point</div>`;
+                }
+                if (bonusDamageModifier !== 0) {
+                    modifierText += `<div class="modifier-applied penalty">+1d4 Damage to All: -2 Battle Points</div>`;
+                }
+                if (lowerTierModifier !== 0) {
+                    modifierText += `<div class="modifier-applied bonus">Lower Tier Adversary: +1 Battle Point</div>`;
+                }
+                
+                encounterList.innerHTML = encounter.map((item, index) => {
+                    const hasDatabase = adversaryDatabase[item.type];
+                    const selectedAdversary = item.selectedAdversary;
+                    
+                    let adversaryDisplay = item.type;
+                    let tierDisplay = '';
+                    
+                    if (selectedAdversary) {
+                        adversaryDisplay = `${selectedAdversary.name} (${item.type})`;
+                        const tierClass = selectedAdversary.tier < partyTier ? 'tier-badge lower' : 'tier-badge';
+                        tierDisplay = `<span class="${tierClass}">Tier ${selectedAdversary.tier}</span>`;
+                    }
+                    
+                    let dropdownHtml = '';
+                    if (hasDatabase && !selectedAdversary) {
+                        dropdownHtml = `
+                            <select class="adversary-dropdown" onchange="selectAdversary(${index}, this.value)">
+                                <option value="">Choose specific adversary...</option>
+                                ${adversaryDatabase[item.type].map((adv, advIndex) => 
+                                    `<option value="${advIndex}">${adv.name} (Tier ${adv.tier})</option>`
+                                ).join('')}
+                            </select>
+                        `;
+                    }
+                    
+                    return `
+                        <div class="encounter-item">
+                            <div class="encounter-info">
+                                <span class="encounter-type">${adversaryDisplay}</span>
+                                ${tierDisplay}
+                                <span class="encounter-cost">${item.cost} point${item.cost > 1 ? 's' : ''}</span>
+                                ${dropdownHtml}
+                            </div>
+                            <button class="remove-btn" onclick="removeAdversary(${index})">×</button>
+                        </div>
+                    `;
+                }).join('') + modifierText;
+            }
+        }
+        
+        // Update battle points display with modifiers
+        function updateBattlePointsDisplay(multiSoloModifier, noElitesModifier, bonusDamageModifier, lowerTierModifier) {
+            const pcCount = parseInt(document.getElementById('pcCount').value) || 4;
+            const activeBtn = document.querySelector('.toggle-btn.active');
+            const difficultyMod = parseInt(activeBtn?.getAttribute('data-value')) || 0;
+            
+            const basePoints = (3 * pcCount) + 2;
+            const finalPoints = basePoints + difficultyMod + multiSoloModifier + noElitesModifier + bonusDamageModifier + lowerTierModifier;
+            
+            document.getElementById('finalPoints').textContent = finalPoints + ' Battle Points';
+            document.getElementById('calculation').textContent = `(3 × ${pcCount}) + 2 = ${basePoints}`;
+            
+            const modifiersList = document.getElementById('modifiers-list');
+            let modifiersText = '';
+            
+            if (difficultyMod !== 0) {
+                modifiersText += `Difficulty: ${difficultyMod > 0 ? '+' : ''}${difficultyMod}`;
+            }
+            if (bonusDamageModifier !== 0) {
+                if (modifiersText) modifiersText += ' • ';
+                modifiersText += `+1d4 Damage: ${bonusDamageModifier}`;
+            }
+            if (multiSoloModifier !== 0) {
+                if (modifiersText) modifiersText += ' • ';
+                modifiersText += `2+ Solos: ${multiSoloModifier}`;
+            }
+            if (noElitesModifier !== 0) {
+                if (modifiersText) modifiersText += ' • ';
+                modifiersText += `No Elites: ${noElitesModifier > 0 ? '+' : ''}${noElitesModifier}`;
+            }
+            if (lowerTierModifier !== 0) {
+                if (modifiersText) modifiersText += ' • ';
+                modifiersText += `Lower Tier: ${lowerTierModifier > 0 ? '+' : ''}${lowerTierModifier}`;
+            }
+            
+            modifiersList.textContent = modifiersText;
+        }
+        
+        // Add adversary to encounter
+        function addAdversary(type, cost) {
+            const usedPoints = encounter.reduce((total, item) => total + item.cost, 0);
+            const partyTier = parseInt(document.querySelector('.tier-btn.active')?.getAttribute('data-value')) || 2;
+            
+            // Calculate current modifiers
+            const soloCount = encounter.filter(item => item.type === 'Solo').length;
+            const multiSoloModifier = soloCount >= 2 ? -2 : 0;
+            
+            const hasElites = encounter.some(item => 
+                ['Bruiser', 'Horde', 'Leader', 'Solo'].includes(item.type)
+            );
+            const noElitesModifier = (!hasElites && encounter.length > 0) ? 1 : 0;
+            
+            const bonusDamageChecked = document.getElementById('bonus-damage').checked;
+            const bonusDamageModifier = bonusDamageChecked ? -2 : 0;
+            
+            const hasLowerTierAdversary = encounter.some(item => 
+                item.selectedAdversary && item.selectedAdversary.tier < partyTier
+            );
+            const lowerTierModifier = hasLowerTierAdversary ? 1 : 0;
+            
+            const totalModifiers = multiSoloModifier + noElitesModifier + bonusDamageModifier + lowerTierModifier;
+            const effectiveBattlePoints = totalBattlePoints + totalModifiers;
+            const remainingPoints = effectiveBattlePoints - usedPoints;
+            
+            if (cost <= remainingPoints) {
+                encounter.push({ type, cost });
+                updateEncounterDisplay();
+            }
+        }
+        
+        // Select specific adversary from dropdown
+        function selectAdversary(encounterIndex, adversaryIndex) {
+            if (adversaryIndex === '') return;
+            
+            const encounterItem = encounter[encounterIndex];
+            const selectedAdversary = adversaryDatabase[encounterItem.type][adversaryIndex];
+            
+            encounter[encounterIndex].selectedAdversary = selectedAdversary;
+            updateEncounterDisplay();
+        }
+        
+        // Remove adversary from encounter
+        function removeAdversary(index) {
+            encounter.splice(index, 1);
+            updateEncounterDisplay();
+        }
+        
+        // Reset entire encounter
+        function resetEncounter() {
+            encounter = [];
+            updateEncounterDisplay();
+        }
+        
+        // Event listeners
+        document.getElementById('pcCount').addEventListener('input', calculateBattlePoints);
+        document.getElementById('bonus-damage').addEventListener('change', updateEncounterDisplay);
+        
+        // Difficulty toggle buttons
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                calculateBattlePoints();
+            });
+        });
+        
+        // Tier toggle buttons
+        document.querySelectorAll('.tier-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const tier = parseInt(this.getAttribute('data-value'));
+                const subtitle = document.querySelector('.tier-subtitle');
+                const subtitles = {
+                    1: 'Tier 1: Level 1',
+                    2: 'Tier 2: Levels 2-4',
+                    3: 'Tier 3: Levels 5-7', 
+                    4: 'Tier 4: Levels 8-10'
+                };
+                subtitle.textContent = subtitles[tier];
+                updateEncounterDisplay();
+            });
+        });
+        
+        // Adversary cost item clicks
+        document.querySelectorAll('.cost-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const type = this.getAttribute('data-type');
+                const cost = parseInt(this.getAttribute('data-cost'));
+                addAdversary(type, cost);
+            });
+        });
+        
+        // Initialize
+        calculateBattlePoints();
+    </script>
+</body>
+</html>
