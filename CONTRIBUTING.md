@@ -4,46 +4,41 @@ Thank you for your interest in contributing! This project thrives on community i
 
 ## Ways to Contribute
 
-### 🐛 Bug Reports
-Found something that doesn't work? Please [open an issue](https://github.com/yourusername/daggerheart-encounter-builder/issues) with:
+### Bug Reports
+Found something that doesn't work? Please [open an issue](https://github.com/coryroush/daggerheart-encounter-builder/issues) with:
 - **Clear description** of the problem
 - **Steps to reproduce** the issue
 - **Expected vs actual behavior**
 - **Browser/device information**
 
-### 📊 Data Corrections
-The adversary database contains 127+ entries - mistakes happen! If you spot errors:
+### Data Corrections
+The adversary database contains 120+ entries - mistakes happen! Errors might include:
 - **Adversary classifications** (wrong type or tier)
 - **Missing adversaries** from the SRD
 - **Incorrect names or details**
 
-### 🎨 UI/UX Improvements
+### UI/UX Improvements
 Ideas for better user experience:
 - **Visual design enhancements**
 - **Mobile responsiveness improvements**
 - **Accessibility improvements**
 - **Performance optimizations**
 
-### ⚙️ New Features
-Have an idea for new functionality? Great features to consider:
+### New Features
+Have an idea for new functionality? Features already in consideration:
 - **Export encounters** (PDF, text, JSON)
 - **Save/load encounters** (local storage)
 - **Encounter templates** (boss fight, exploration, etc.)
 - **Advanced filtering** (by tier, type, theme)
 - **Encounter analysis** (difficulty assessment, balance tips)
 
-## Development Setup
-
-### Prerequisites
-- A modern web browser
-- Text editor (VS Code, Sublime Text, etc.)
-- Basic knowledge of HTML, CSS, and JavaScript
+## Development
 
 ### Getting Started
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/yourusername/daggerheart-encounter-builder.git
+   git clone https://github.com/coryroush/daggerheart-encounter-builder.git
    cd daggerheart-encounter-builder
    ```
 3. **Open `index.html`** in your browser to test
@@ -59,32 +54,6 @@ daggerheart-encounter-builder/
 ├── CONTRIBUTING.md    # This file
 └── LICENSE           # Community Gaming License
 ```
-
-## Code Guidelines
-
-### HTML Structure
-- **Semantic markup** - use appropriate HTML elements
-- **Accessibility** - include proper ARIA labels and alt text
-- **Mobile-first** - ensure responsive design
-
-### CSS Standards
-- **CSS Custom Properties** - use the existing color variables
-- **BEM naming** - follow existing class naming patterns
-- **Mobile responsive** - test on various screen sizes
-- **Performance** - minimize reflows and repaints
-
-### JavaScript Practices
-- **Vanilla JS** - no external dependencies
-- **ES6+ features** - use modern JavaScript
-- **Clear naming** - descriptive variable and function names
-- **Comments** - explain complex logic
-- **Error handling** - graceful failure modes
-
-### Brand Consistency
-Maintain the **Forge & Frame** visual identity:
-- **Color scheme**: Forge Copper, Frame Steel, Blueprint Blue
-- **Typography**: Clean, technical aesthetic
-- **Spacing**: Consistent with existing patterns
 
 ## Adversary Database
 
@@ -103,16 +72,6 @@ const adversaryDatabase = {
 2. **Correct classification** - proper type and tier
 3. **Alphabetical order** - within each type
 4. **Consistent naming** - match SRD exactly
-
-### Data Validation
-Before submitting adversary changes:
-- [ ] Names match SRD exactly
-- [ ] Types are correct (Minion, Social, Support, etc.)
-- [ ] Tiers are accurate (1-4)
-- [ ] No duplicates within types
-- [ ] Alphabetical order maintained
-
-## Testing
 
 ### Manual Testing Checklist
 - [ ] **Basic functionality** - add/remove adversaries
@@ -170,8 +129,6 @@ Brief description of the change
 - **Constructive feedback** - focus on the code, not the person
 - **Patient** - maintainers are volunteers
 - **Inclusive** - welcoming to all skill levels
-
-### Communication
 - **Issues** - for bug reports and feature requests
 - **Pull Requests** - for code contributions
 - **Discussions** - for questions and ideas
@@ -189,8 +146,4 @@ Contributors will be recognized in:
 - **Check existing issues** - your question might be answered
 - **Be specific** - provide context and details
 
-Thank you for helping make this tool better for the entire Daggerheart community!
-
----
-
-*Built with ❤️ for the Daggerheart community*
+Thank you for helping make this tool better for the entire community!
