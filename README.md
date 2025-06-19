@@ -2,6 +2,8 @@
 
 A comprehensive encounter building tool compatible with the Daggerheart™ tabletop RPG system. Build balanced encounters using the official SRD's Battle Points formula, with automatic modifier calculations and a complete adversary database.
 
+https://coryroush.github.io/daggerheart-encounter-builder/
+
 ## Features
 
 ### Complete SRD Implementation
