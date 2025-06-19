@@ -557,12 +557,25 @@
             color: var(--frame-steel);
             font-size: 12px;
         }
-        
+
+        .footer-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
         .footer a {
             color: var(--forge-copper);
             text-decoration: none;
         }
-        
+
         .footer a:hover {
             text-decoration: underline;
         }
@@ -683,8 +696,13 @@
     </div>
     
 <div class="footer">
-    <iframe src="https://ghbtns.com/github-btn.html?user=coryroush&repo=daggerheart-encounter-builder&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
-    <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'X8X41GAGYA');kofiwidget2.draw();</script> </p>
+    <div class="footer-buttons">
+        <iframe src="https://ghbtns.com/github-btn.html?user=coryroush&repo=daggerheart-encounter-builder&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub"></iframe>
+        
+        <script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script>
+        <script type='text/javascript'>kofiwidget2.init('Support me on Ko-fi', '#72a4f2', 'X8X41GAGYA');kofiwidget2.draw();</script>
+    </div>
+    
     <p>Tool licensed under <a href="https://opensource.org/licenses/MIT">MIT License</a> | Game content from the <a href="https://darringtonpress.com/daggerheart/">Daggerheart SRD</a></p>
 </div>
 
