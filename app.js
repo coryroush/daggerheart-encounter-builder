@@ -202,8 +202,8 @@ function addAdversary(type, cost) {
     }
 }
 
-// Select specific adversary from dropdown
-function selectAdversary(encounterIndex, adversaryIndex) {
+// Global functions that need to be accessible from HTML onclick attributes
+window.selectAdversary = function(encounterIndex, adversaryIndex) {
     if (adversaryIndex === '') return;
     
     const encounterItem = encounter[encounterIndex];
@@ -213,22 +213,19 @@ function selectAdversary(encounterIndex, adversaryIndex) {
     updateEncounterDisplay();
 }
 
-// Remove adversary from encounter
-function removeAdversary(index) {
+window.removeAdversary = function(index) {
     encounter.splice(index, 1);
     updateEncounterDisplay();
     updateCopyButtonState();
 }
 
-// Reset entire encounter
-function resetEncounter() {
+window.resetEncounter = function() {
     encounter = [];
     updateEncounterDisplay();
     updateCopyButtonState();
 }
 
-// Copy encounter function
-function copyEncounter() {
+window.copyEncounter = function() {
     const encounterText = formatEncounterText();
     
     // Try to copy to clipboard
