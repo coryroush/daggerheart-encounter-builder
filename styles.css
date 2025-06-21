@@ -81,7 +81,7 @@ input[type="number"]:focus {
     text-align: center;
     margin-top: 20px;
     box-shadow: 0 4px 15px rgba(184, 92, 56, 0.3);
-    min-height: 85px;
+    min-height: 80px;
 }
 
 .result h2 {
@@ -93,14 +93,14 @@ input[type="number"]:focus {
 
 .calculation {
     margin-top: 8px;
-    font-size: 13px;
+    font-size: 14px;
     opacity: 0.9;
     font-weight: 500;
 }
 
 .modifiers-list {
     margin-top: 6px;
-    font-size: 11px;
+    font-size: 12px;
     opacity: 0.8;
     font-weight: 400;
 }
