@@ -479,3 +479,23 @@ function updateCopyButtonState() {
         copyBtn.disabled = true;
     }
 }
+
+let statblocksCache = null;
+
+async function getStatblock(adversaryId) {
+    if (!statblocksCache) {
+        const response = await fetch('statblocks.json');
+        statblocksCache = await response.json();
+    }
+
+    // Find the adversary by name (since JSON uses names, not IDs)
+    return statblocksCache.find(adversary =>
+        adversary.name.toLowerCase().replace(/\s+/g, '_') === adversaryId
+    );
+}
+
+// Test function - call this in browser console
+async function testStatblock() {
+    const acidBurrower = await getStatblock('acid_burrower');
+    console.log(acidBurrower);
+}
