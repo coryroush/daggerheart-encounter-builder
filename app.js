@@ -48,23 +48,12 @@ function updateEncounterDisplay() {
     
     // Color coding for remaining points
     const remainingElement = document.getElementById('remaining-points');
-    const remainingContainer = remainingElement.closest('.points-remaining');
+    remainingElement.classList.remove('warning', 'danger');
     
-    remainingElement.classList.remove('plenty', 'low', 'over', 'perfect');
-    remainingContainer.classList.remove('plenty', 'low', 'over', 'perfect');
-    
-    if (remainingPoints === 0) {
-        remainingElement.classList.add('perfect');
-        remainingContainer.classList.add('perfect');
-    } else if (remainingPoints < 0) {
-        remainingElement.classList.add('over');
-        remainingContainer.classList.add('over');
+    if (remainingPoints < 0) {
+        remainingElement.classList.add('danger');
     } else if (remainingPoints <= 3) {
-        remainingElement.classList.add('low');
-        remainingContainer.classList.add('low');
-    } else {
-        remainingElement.classList.add('plenty');
-        remainingContainer.classList.add('plenty');
+        remainingElement.classList.add('warning');
     }
     
     // Update adversary affordability
@@ -106,7 +95,6 @@ function updateEncounterDisplay() {
                         <option value="">Choose specific ${item.type.toLowerCase()}...</option>
                         ${adversaryDatabase[item.type].map((adv, advIndex) => {
                             const isSelected = item.selectedAdversary && item.selectedAdversary.name === adv.name;
-                            const tierBadge = adv.tier < partyTier ? ' class="lower"' : '';
                             return `<option value="${advIndex}" ${isSelected ? 'selected' : ''}>${adv.name} (Tier ${adv.tier})</option>`;
                         }).join('')}
                     </select>
