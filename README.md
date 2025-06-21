@@ -27,22 +27,6 @@ https://coryroush.github.io/daggerheart-encounter-builder/
 5. **Select Specifics**: Choose adversaries from dropdowns
 6. **Monitor Budget**: Watch your Battle Points and modifiers update
 
-## Example Encounters
-
-### Tier 1 Starter (4 PCs, 14 points)
-- 1 × Pirate Captain (Leader, 3 pts)
-- 2 × Archer Guard (Ranged, 4 pts)
-- 1 × Giant Mosquitoes (Horde, 2 pts)
-- 5 × Jagged Knife Lackey (Minions, 5 pts)
-- **Total**: 14 points
-
-### Tier 3 Dragon Fight (4 PCs, 14 points)
-- 1 × Young Ice Dragon (Solo, 5 pts)
-- 2 × Knight of the Realm (Leader, 6 pts)
-- 1 × Elite Soldier (Standard, 2 pts)
-- **Bonus**: Lower Tier modifier (+1 point)
-- **Total**: 15 points used, 14 available + 1 bonus
-
 ## Technical Details
 
 ### SRD Compliance
