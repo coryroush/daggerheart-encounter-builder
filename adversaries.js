@@ -128,6 +128,7 @@ const adversaryDatabase = {
     "Solo": [
         { name: "Acid Burrower", tier: 1, id:"acid_burrower" },
         { name: "Cave Ogre", tier: 1, id: "cave_ogre" },
+        { name: "Construct", tier: 1, id: "construct" },
         { name: "Ancient Dragon", tier: 2 },
         { name: "Lich", tier: 2 },
         { name: "Pit Fiend", tier: 3 },
