@@ -284,13 +284,6 @@ input[type="number"]:focus {
     margin-bottom: 20px;
 }
 
-.points-display {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
 .points-remaining, .points-used {
     text-align: center;
 }
