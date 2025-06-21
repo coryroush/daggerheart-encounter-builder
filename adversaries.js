@@ -1,4 +1,5 @@
-      const adversaryDatabase = {
+console.log("adversaries.js loaded!");
+const adversaryDatabase = {
             "Minions": [
                 { name: "Giant Rat", tier: 1 },
                 { name: "Jagged Knife Lackey", tier: 1 },
