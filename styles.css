@@ -277,6 +277,13 @@ input[type="number"]:focus {
     letter-spacing: 0.5px;
 }
 
+.encounter-summary {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 .points-display {
     display: flex;
     gap: 15px;
