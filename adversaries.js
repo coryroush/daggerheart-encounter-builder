@@ -107,7 +107,7 @@ const adversaryDatabase = {
         { name: "High Seraph", tier: 4 }
     ],
     "Bruiser": [
-        { name: "Bear", tier: 1 },
+        { name: "Bear", tier: 1, id: "bear" },
         { name: "Deeproot Defender", tier: 1 },
         { name: "Giant Scorpion", tier: 1 },
         { name: "Jagged Knife Kneebreaker", tier: 1 },
@@ -126,6 +126,8 @@ const adversaryDatabase = {
         { name: "Outer Realms Destroyer", tier: 4 }
     ],
     "Solo": [
+        { name: "Acid Burrower", tier: 1, id:"acid_burrower" },
+        { name: "Cave Ogre", tier: 1, id: "cave_ogre" },
         { name: "Ancient Dragon", tier: 2 },
         { name: "Lich", tier: 2 },
         { name: "Pit Fiend", tier: 3 },
