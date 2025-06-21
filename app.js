@@ -1,3 +1,4 @@
+console.log("JavaScript file loaded successfully!");
 // Encounter tracking
 let encounter = [];
 let totalBattlePoints = 14;
