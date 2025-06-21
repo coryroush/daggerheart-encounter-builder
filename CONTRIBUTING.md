@@ -26,7 +26,7 @@ Ideas for better user experience:
 
 ### New Features
 Have an idea for new functionality? Features already in consideration:
-- **Export encounters** (PDF, text, JSON)
+- **Export encounters** (PDF, ~~text~~, JSON)
 - **Save/load encounters** (local storage)
 - **Encounter templates** (boss fight, exploration, etc.)
 - **Advanced filtering** (by tier, type, theme)
