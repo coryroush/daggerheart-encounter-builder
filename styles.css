@@ -81,6 +81,7 @@ input[type="number"]:focus {
     text-align: center;
     margin-top: 20px;
     box-shadow: 0 4px 15px rgba(184, 92, 56, 0.3);
+    min-height: 85px;
 }
 
 .result h2 {
