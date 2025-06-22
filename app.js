@@ -125,7 +125,10 @@ function updateEncounterDisplay() {
             return `
                         <div class="encounter-item">
                             <div class="encounter-info">
-                                <span class="encounter-type">${adversaryDisplay}</span>
+                                <span class="encounter-type ${selectedAdversary ? 'clickable-adversary' : ''}" 
+      ${selectedAdversary ? `onclick="showStatblockModal('${selectedAdversary.name.toLowerCase().replace(/\s+/g, '_')}')"` : ''}>
+    ${adversaryDisplay}
+</span>
                                 ${tierDisplay}
                                 <span class="encounter-cost">${item.cost} point${item.cost > 1 ? 's' : ''}</span>
                                 ${dropdownHtml}
@@ -493,9 +496,85 @@ async function getStatblock(adversaryId) {
         adversary.name.toLowerCase().replace(/\s+/g, '_') === adversaryId
     );
 }
+// Modal functions
+function showStatblockModal(adversaryId) {
+    getStatblock(adversaryId).then(statblock => {
+        if (statblock) {
+            populateModal(statblock);
+            document.getElementById('statblock-modal').style.display = 'block';
+        } else {
+            console.error('Statblock not found for:', adversaryId);
+        }
+    });
+}
 
-// Test function - call this in browser console
-async function testStatblock() {
-    const acidBurrower = await getStatblock('acid_burrower');
-    console.log(acidBurrower);
+function closeStatblockModal() {
+    document.getElementById('statblock-modal').style.display = 'none';
+}
+
+function populateModal(statblock) {
+    // Basic info
+    document.getElementById('modal-adversary-name').textContent = statblock.name;
+    document.getElementById('modal-type').textContent = statblock.type;
+    document.getElementById('modal-tier').textContent = `Tier ${statblock.tier}`;
+    document.getElementById('modal-description').innerHTML = formatText(statblock.description);
+    document.getElementById('modal-motives').textContent = statblock.motives_tactics;
+
+    // Stats
+    document.getElementById('modal-difficulty').textContent = statblock.difficulty;
+    document.getElementById('modal-thresholds').textContent = `Major ${statblock.major} / Severe ${statblock.severe}`;
+    document.getElementById('modal-hp').textContent = statblock.hp;
+    document.getElementById('modal-stress').textContent = statblock.stress;
+    document.getElementById('modal-attack').textContent = `${statblock.modifier} | ${statblock.standard_attack} | ${statblock.damage_dice}`;
+
+    // Experiences (hide if empty)
+    if (statblock.experiences && statblock.experiences.trim()) {
+        document.getElementById('modal-experiences').textContent = statblock.experiences;
+        document.getElementById('modal-experiences-row').style.display = 'flex';
+    } else {
+        document.getElementById('modal-experiences-row').style.display = 'none';
+    }
+
+    // Features
+    populateFeatures(statblock);
+}
+
+// Helper function to format markdown-style text
+function formatText(text) {
+    return text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')  // **text** → <strong>text</strong>
+        .replace(/\*(.*?)\*/g, '<em>$1</em>');             // *text* → <em>text</em>
+}
+function populateFeatures(statblock) {
+    const featuresContainer = document.getElementById('modal-features');
+    featuresContainer.innerHTML = ''; // Clear existing features
+
+    // Check each feature slot (1-5)
+    for (let i = 1; i <= 5; i++) {
+        const featureName = statblock[`feature${i}_name`];
+        const featureType = statblock[`feature${i}_type`];
+        const featureDesc = statblock[`feature${i}_desc`];
+
+        // Only add features that have content
+        if (featureName && featureName.trim() && featureDesc && featureDesc.trim()) {
+            const featureDiv = document.createElement('div');
+            featureDiv.className = 'feature-item';
+
+            featureDiv.innerHTML = `
+                <div class="feature-header">
+                    ${formatText(featureName)} - ${formatText(featureType)}
+                </div>
+                <div class="feature-description">
+                    ${formatText(featureDesc)}
+                </div>
+            `;
+
+            featuresContainer.appendChild(featureDiv);
+        }
+    }
+
+    // If no features were added, show a message
+    if (featuresContainer.children.length === 0) {
+        featuresContainer.innerHTML = '<p style="text-align: center; color: #666; font-style: italic;">No special features</p>';
+    }
 }

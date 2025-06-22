@@ -630,3 +630,147 @@ input[type="number"]:focus {
 .footer a:hover {
     text-decoration: underline;
 }
+/* Modal Styles */
+.modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+}
+
+.modal-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(45, 55, 72, 0.3);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 2px solid var(--silver);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px 15px;
+    border-bottom: 2px solid var(--silver);
+    background: linear-gradient(135deg, var(--forge-copper), var(--ember-orange));
+    color: white;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    padding: 25px;
+}
+/* Statblock Content Styles */
+.statblock-type-tier {
+    font-size: 14px;
+    color: var(--forge-copper);
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.statblock-description {
+    font-style: italic;
+    color: var(--charcoal);
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.statblock-motives {
+    color: var(--frame-steel);
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.statblock-stats {
+    background-color: var(--parchment);
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid var(--silver);
+    margin-bottom: 20px;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.stat-row:last-child {
+    margin-bottom: 0;
+}
+
+.stat-label {
+    font-weight: 600;
+    color: var(--frame-steel);
+    margin-right: 8px;
+    min-width: 80px;
+}
+
+.stat-separator {
+    margin: 0 12px;
+    color: var(--silver);
+}
+
+.statblock-features {
+    /* We'll style features next */
+}
+
+/* Feature Styles */
+.feature-item {
+    margin-bottom: 15px;
+    padding: 12px;
+    background-color: #fafafa;
+    border-left: 4px solid var(--forge-copper);
+    border-radius: 4px;
+}
+
+.feature-header {
+    font-weight: 600;
+    color: var(--frame-steel);
+    margin-bottom: 6px;
+}
+
+.feature-description {
+    line-height: 1.4;
+    color: var(--charcoal);
+}
+
+.clickable-adversary {
+    color: var(--forge-copper) !important;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.clickable-adversary:hover {
+    color: var(--ember-orange) !important;
+}
