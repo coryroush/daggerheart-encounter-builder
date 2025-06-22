@@ -143,5 +143,53 @@
 
     <script src="adversaries.js"></script>
     <script src="app.js"></script>
+    <!-- Statblock Modal -->
+    <div id="statblock-modal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 id="modal-adversary-name">Adversary Name</h2>
+                <button class="modal-close" onclick="closeStatblockModal()">&times;</button>
+            </div>
+            <div class="modal-content">
+                <div class="statblock-main">
+                    <div class="statblock-type-tier">
+                        <span id="modal-type">Type</span> • <span id="modal-tier">Tier X</span>
+                    </div>
+                    <div id="modal-description" class="statblock-description">Description text</div>
+                    <div id="modal-motives" class="statblock-motives">Motives & Tactics</div>
+
+                    <div class="statblock-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Difficulty:</span>
+                            <span id="modal-difficulty">XX</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Thresholds:</span>
+                            <span id="modal-thresholds">Major XX / Severe XX</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">HP:</span>
+                            <span id="modal-hp">X</span>
+                            <span class="stat-separator">•</span>
+                            <span class="stat-label">Stress:</span>
+                            <span id="modal-stress">X</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Attack:</span>
+                            <span id="modal-attack">+X | Attack Name | Damage</span>
+                        </div>
+                        <div id="modal-experiences-row" class="stat-row">
+                            <span class="stat-label">Experience:</span>
+                            <span id="modal-experiences">Experience +X</span>
+                        </div>
+                    </div>
+
+                    <div id="modal-features" class="statblock-features">
+                        <!-- Features will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
