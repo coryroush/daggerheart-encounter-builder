@@ -125,7 +125,10 @@ function updateEncounterDisplay() {
             return `
                         <div class="encounter-item">
                             <div class="encounter-info">
-                                <span class="encounter-type">${adversaryDisplay}</span>
+                                <span class="encounter-type ${selectedAdversary ? 'clickable-adversary' : ''}" 
+      ${selectedAdversary ? `onclick="showStatblockModal('${selectedAdversary.name.toLowerCase().replace(/\s+/g, '_')}')"` : ''}>
+    ${adversaryDisplay}
+</span>
                                 ${tierDisplay}
                                 <span class="encounter-cost">${item.cost} point${item.cost > 1 ? 's' : ''}</span>
                                 ${dropdownHtml}

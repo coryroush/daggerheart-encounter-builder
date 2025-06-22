@@ -763,3 +763,14 @@ input[type="number"]:focus {
     line-height: 1.4;
     color: var(--charcoal);
 }
+
+.clickable-adversary {
+    color: var(--forge-copper) !important;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.clickable-adversary:hover {
+    color: var(--ember-orange) !important;
+}
